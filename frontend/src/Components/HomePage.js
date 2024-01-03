@@ -10,7 +10,7 @@ function HomePage (props) {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await fetch(`/data/${localStorage.getItem('department')}/${localStorage.getItem('division')}`, {
+            const response = await fetch(`/data/${localStorage.getItem('department')}/${localStorage.getItem('division') || 'all'}`, {
               method: 'GET',
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -21,7 +21,7 @@ function HomePage (props) {
             if (response.ok) {
               const data = await response.json();
               console.log('Fetched Data:', data);
-              setFetchedData(data.document);
+              setFetchedData(data.document || data.allDocuments);
             } else {
               console.error('Error during data fetch:', response.statusText);
             }
