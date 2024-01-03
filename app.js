@@ -70,49 +70,65 @@ const OpinionPublishingModel = siteDataConnection.model('opinion_publishing', si
 const NewsManagementModel = siteDataConnection.model('news_management', siteDataSchema, 'news_management');
 
 
-APP.get('/data/:department/:division', async (req, res) => {
+APP.get('/data/:department/:division?', async (req, res) => {
     const auth = req.headers['authorization'];
     const token = auth.split(' ')[1];
 
     try {
         const decoded = JWT.verify(token, 'JWT-Secret');
 
-        if (decoded.level === 'normal') {
-            const department = req.params.department;
-            const division = req.params.division;
+        const userLevel = decoded.level;
+        const userDepartment = decoded.department;
+        const userDivision = decoded.division;
 
-            // Choose the appropriate model based on the user's division
-            let documentModel;
-            switch (department) {
-                case 'news_management':
-                    documentModel = NewsManagementModel;
-                    break;
-                case 'software_reviews':
-                    documentModel = SoftwareReviewsModel;
-                    break;
-                case 'hardware_reviews':
-                    documentModel = HardwareReviewsModel;
-                    break;
-                case 'opinion_publishing':
-                    documentModel = OpinionPublishingModel;
-                    break;
-                default:
-                    return res.status(400).json({ error: 'Invalid department' });
+        const requestedDepartment = req.params.department;
+        const requestedDivision = req.params.division || 'all'; // Default to 'all' if division is not provided
+
+        // Check if the user is accessing their own department
+        if (userLevel === 'normal' && (userDepartment !== requestedDepartment || userDivision !== requestedDivision)) {
+            return res.status(403).json({ error: 'Access forbidden' });
+        }
+
+        // Choose the appropriate model based on the user's division
+        let documentModel;
+        switch (requestedDepartment) {
+            case 'news_management':
+                documentModel = NewsManagementModel;
+                break;
+            case 'software_reviews':
+                documentModel = SoftwareReviewsModel;
+                break;
+            case 'hardware_reviews':
+                documentModel = HardwareReviewsModel;
+                break;
+            case 'opinion_publishing':
+                documentModel = OpinionPublishingModel;
+                break;
+            default:
+                return res.status(400).json({ error: 'Invalid department' });
+        }
+
+        if (userLevel === 'manager' && userDepartment === requestedDepartment) {
+            if (requestedDivision === 'all') {
+                // Fetch all documents in the department for managers
+                const allDocuments = await documentModel.find({});
+                res.json({ allDocuments });
+            } else {
+                // Send an error if a specific division is provided for managers
+                return res.status(400).json({ error: 'Invalid division' });
             }
-
+        } else {
             // Fetch the document from the database based on division
             const document = await documentModel.findOne({
-                _id: division,
+                _id: requestedDivision,
             });
 
             if (!document) {
                 return res.status(404).json({ error: 'Document not found' });
             }
 
-            // Send the document to the user
+            // Send the requested document to the user
             res.json({ document });
-        } else {
-            return res.status(403).json({ error: 'Access forbidden' });
         }
     } catch (err) {
         res.status(401).send({ err: 'Bad JWT!' });
