@@ -38,6 +38,7 @@ class App extends Component{
                     username: data.username,
                     department: data.department,
                     level: data.level,
+                    division: data.division,
                 }, () => {
                     // Save data to localStorage
                     localStorage.setItem('isLoggedIn', 'true');

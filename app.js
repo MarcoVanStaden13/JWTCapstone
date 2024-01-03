@@ -33,11 +33,91 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String },
-    department: { type: String }
+    department: { type: String },
+    division: { type: String },
 });
 
 const Users = mongoose.model('Users', userSchema);
 
+
+// Connect to SiteData MongoDB
+const siteDataUri = 'mongodb+srv://marco:hyperionPassword123@capstone.ahbbpec.mongodb.net/SiteData';
+const siteDataConnection = mongoose.createConnection(siteDataUri);
+
+siteDataConnection.on('error', function () {
+    console.log('Could not connect to the SiteData database. Exiting now...');
+    process.exit();
+});
+siteDataConnection.once('open', function () {
+    console.log('Successfully connected to the SiteData database');
+});
+
+const siteDataSchema = new mongoose.Schema({
+    _id: String,
+    Logins: {
+        type: Map,
+        of: new mongoose.Schema({
+            username: { type: String, required: true },
+            password: { type: String, required: true },
+        }),
+    },
+});
+
+// Define models for SiteData collections
+const SoftwareReviewsModel = siteDataConnection.model('software_reviews', siteDataSchema);
+const HardwareReviewsModel = siteDataConnection.model('hardware_reviews', siteDataSchema);
+const OpinionPublishingModel = siteDataConnection.model('opinion_publishing', siteDataSchema, 'opinion_publishing');
+const NewsManagementModel = siteDataConnection.model('news_management', siteDataSchema, 'news_management');
+
+
+APP.get('/data/:department/:division', async (req, res) => {
+    const auth = req.headers['authorization'];
+    const token = auth.split(' ')[1];
+
+    try {
+        const decoded = JWT.verify(token, 'JWT-Secret');
+
+        if (decoded.level === 'normal') {
+            const department = req.params.department;
+            const division = req.params.division;
+
+            // Choose the appropriate model based on the user's division
+            let documentModel;
+            switch (department) {
+                case 'news_management':
+                    documentModel = NewsManagementModel;
+                    break;
+                case 'software_reviews':
+                    documentModel = SoftwareReviewsModel;
+                    break;
+                case 'hardware_reviews':
+                    documentModel = HardwareReviewsModel;
+                    break;
+                case 'opinion_publishing':
+                    documentModel = OpinionPublishingModel;
+                    break;
+                default:
+                    return res.status(400).json({ error: 'Invalid department' });
+            }
+
+            // Fetch the document from the database based on division
+            const document = await documentModel.findOne({
+                _id: division,
+            });
+
+            if (!document) {
+                return res.status(404).json({ error: 'Document not found' });
+            }
+
+            // Send the document to the user
+            res.json({ document });
+        } else {
+            return res.status(403).json({ error: 'Access forbidden' });
+        }
+    } catch (err) {
+        res.status(401).send({ err: 'Bad JWT!' });
+    }
+});
 
 
 APP.post('/login', async (req, res) => {
@@ -54,6 +134,7 @@ APP.post('/login', async (req, res) => {
             username: user.username,
             level: user.role,
             department: user.department,
+            division: user.division,
         };
 
         const token = JWT.sign(payload, "JWT-Secret", { algorithm: 'HS256' });
@@ -67,7 +148,7 @@ APP.post('/login', async (req, res) => {
 });
 
 APP.post('/register', async (req, res) => {
-    const { username, password, department } = req.body;
+    const { username, password, department, division } = req.body;
 
     try {
         // Check if the username already exists
@@ -82,6 +163,7 @@ APP.post('/register', async (req, res) => {
             password,
             role: 'normal', // Set the default role or modify as needed
             department,
+            division,
         });
 
         // Save the new user to the database
