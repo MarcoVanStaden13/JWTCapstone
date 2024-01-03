@@ -17,6 +17,7 @@ class SoftwareReviews extends Component{
                 <Link to="/HardwareReviews">Hardware Reviews</Link>
                 <br/>
                 <Link to="/OpinionPublishing">Opinion Publishing</Link>
+                <br />
             </>
         );
     }

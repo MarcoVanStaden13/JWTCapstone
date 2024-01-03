@@ -16,7 +16,7 @@ APP.use(EXPRESS.json()) // Parse incoming JSON requests
 APP.use(BODYPARSER.urlencoded({ extended: true })) // Parse incoming form data
 
 // Connect to MongoDB
-const uri = 'mongodb+srv://marco:hyperionPassword123@capstone.ahbbpec.mongodb.net/SiteData';
+const uri = 'mongodb+srv://marco:hyperionPassword123@capstone.ahbbpec.mongodb.net/UserData';
 mongoose.connect(uri);
 
 mongoose.connection.on('error', function () {
@@ -93,24 +93,6 @@ APP.post('/register', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-
-
-// const verifyJWT = (req, res, next) => {
-//     const token = req.headers['authorization']
-
-//     if (!token){
-//         res.send('no token given')
-//     } else{
-//         JWT.verify(token, "JWT-Secret", (err, decoded) => {
-//             if(err){
-//                 res.json({auth: false, message: "bad jwt"})
-//             } else {
-//                 req.username = decoded.username;
-//                 next();
-//             }
-//         })
-//     }
-// }
 
 APP.get('/verify', (req, res) => {
     const auth = req.headers['authorization']

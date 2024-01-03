@@ -19,6 +19,7 @@ class  OpinionPublishing extends Component{
                 <Link to="/OpinionPublishing">Opinion Publishing</Link>
                 <br />
                 <Link to="/AuthPanel">AuthPanel</Link>
+                <br />
             </>
         );
     }

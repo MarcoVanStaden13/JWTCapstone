@@ -11,8 +11,8 @@ class AuthPanel extends Component {
             password1: '',
             password2: '',
             department: '',
-            isLogin: true, // Added state to track whether it's a login or registration form
-            
+            division: '',
+            isLogin: true,
         };
     }
 
@@ -24,7 +24,7 @@ class AuthPanel extends Component {
     handleFormSubmit = async (event) => {
         event.preventDefault();
 
-        const { username, password, password1, password2, department, isLogin } = this.state;
+        const { username, password, password1, password2, department, isLogin, division } = this.state;
 
         if (isLogin) {
             try {
@@ -40,7 +40,6 @@ class AuthPanel extends Component {
                 if (response.ok) {
                     // Successfully logged in, handle the response accordingly (e.g., store the token)
                     const data = await response.json();
-                    console.log('Login success:', data);
                     localStorage.setItem('token', data.token);
                     this.props.handleSignIn(data); // Call the handleSignIn function from App.js
                 } else {
@@ -64,12 +63,12 @@ class AuthPanel extends Component {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ username, password: password1, department }),
+                    body: JSON.stringify({ username, password: password1, department, division }),
                 });
 
                 if (response.ok) {
                     // Successfully registered, handle the response accordingly (e.g., redirect)
-                    this.props.history.push('/login'); // Redirect to login page
+                    this.props.history.push('/auth'); // Redirect to login page
                 } else {
                     // Handle registration failure (e.g., show an error message)
                     console.error('Registration failed:', response.statusText);
@@ -134,9 +133,24 @@ class AuthPanel extends Component {
                                 <option value="opinion_publishing">Opinion Publishing</option>
                             </select>
                             <br />
+                            <select
+                                id="division"
+                                name="division"
+                                value={this.state.division}
+                                onChange={this.handleInputChange}
+                                className="form-select"
+                            >
+                                <option value="" disabled selected hidden>Select your division</option>
+                                <option value="writing">Writing</option>
+                                <option value="editorial">Editorial</option>
+                                <option value="it">IT</option>
+                                <option value="advertising">Advertising</option>
+                                <option value="social_media">Social Media</option>
+                            </select>
+                            <br />
                         </>
                     )}
-                    <button onClick={this.toggleForm} className="toggle-button">{isLogin ? 'Register' : 'Login'}</button>
+                    <button type="button" onClick={this.toggleForm} className="toggle-button">{isLogin ? 'Register' : 'Login'}</button>
                     <br />
                     <button type="submit" className="submit-button">{isLogin ? 'Login' : 'Register'}</button>
                 </form>
@@ -152,8 +166,6 @@ class AuthPanel extends Component {
                 <Link to="/HardwareReviews">Hardware Reviews</Link>
                 <br />
                 <Link to="/OpinionPublishing">Opinion Publishing</Link>
-                <br />
-                <Link to="/AuthPanel">AuthPanel</Link>
             </>
         );
     }
