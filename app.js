@@ -89,6 +89,29 @@ APP.get('/data/:department/:division?', async (req, res) => {
             return res.status(403).json({ error: 'Access forbidden' });
         }
 
+
+        if (userLevel === 'admin') {
+            console.log('Admin level access');
+
+            // Fetch all documents in all collections
+            const allDocuments = await Promise.all([
+                NewsManagementModel.find({}),
+                SoftwareReviewsModel.find({}),
+                HardwareReviewsModel.find({}),
+                OpinionPublishingModel.find({})
+            ]);
+
+            const result = {
+                news_management: allDocuments[0],
+                software_reviews: allDocuments[1],
+                hardware_reviews: allDocuments[2],
+                opinion_publishing: allDocuments[3]
+            };
+
+            res.json(result);
+            return;
+        }
+
         // Choose the appropriate model based on the user's division
         let documentModel;
         switch (requestedDepartment) {
@@ -135,6 +158,29 @@ APP.get('/data/:department/:division?', async (req, res) => {
     }
 });
 
+// Add a new endpoint to get all departments and their data
+APP.get('/allDepartments', async (req, res) => {
+    try {
+        // Fetch data for each department
+        const newsManagementData = await NewsManagementModel.find({});
+        const softwareReviewsData = await SoftwareReviewsModel.find({});
+        const hardwareReviewsData = await HardwareReviewsModel.find({});
+        const opinionPublishingData = await OpinionPublishingModel.find({});
+
+        // Organize the data by department
+        const allDepartments = {
+            news_management: newsManagementData,
+            software_reviews: softwareReviewsData,
+            hardware_reviews: hardwareReviewsData,
+            opinion_publishing: opinionPublishingData,
+        };
+
+        res.json(allDepartments);
+    } catch (error) {
+        console.error('Error fetching department data:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 APP.post('/login', async (req, res) => {
     const uName = req.body.username

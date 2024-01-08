@@ -7,31 +7,32 @@ function HomePage (props) {
     const [fetchedData, setFetchedData] = useState(null);
 
 
+
     useEffect(() => {
         const fetchData = async () => {
-          try {
-            const response = await fetch(`/data/${localStorage.getItem('department')}/${localStorage.getItem('division') || 'all'}`, {
-              method: 'GET',
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json',
-              },
-            });
-    
-            if (response.ok) {
-              const data = await response.json();
-              console.log('Fetched Data:', data);
-              setFetchedData(data.document || data.allDocuments);
-            } else {
-              console.error('Error during data fetch:', response.statusText);
+            try {
+                const response = await fetch(`/data/${localStorage.getItem('department')}/${localStorage.getItem('division') || 'all'}`, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Fetched Data:', data);
+                    setFetchedData(data.document || data.allDocuments || data);
+                } else {
+                    console.error('Error during data fetch:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error during data fetch:', error);
             }
-          } catch (error) {
-            console.error('Error during data fetch:', error);
-          }
         };
-    
+
         fetchData();
-      }, []);
+    }, []);
 
     const userLevel = () => {
         if (localStorage.getItem('level') === 'normal') {
@@ -45,6 +46,8 @@ function HomePage (props) {
         }
     }
 
+    // Extracting division IDs
+    const divisionIds = fetchedData ? (Array.isArray(fetchedData) ? fetchedData.map(division => division._id) : []) : [];
 
 
     return (
@@ -78,12 +81,20 @@ function HomePage (props) {
                 <br />
                 <Link to="/auth">Authorization</Link>
                 <br />
+
                 {fetchedData && (
-          <div>
-            <p>Fetched Data:</p>
-            <pre>{JSON.stringify(fetchedData, null, 2)}</pre>
-          </div>
-        )}
+                    <div>
+                        <p>Fetched Data:</p>
+                        <pre>{JSON.stringify(fetchedData, null, 2)}</pre>
+                    </div>
+                )}
+
+
+                {/* Displaying division IDs */}
+                <div>
+                    <p>Division IDs:</p>
+                    <pre>{JSON.stringify(divisionIds, null, 2)}</pre>
+                </div>
             </div>
 
         </>
