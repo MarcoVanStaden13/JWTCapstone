@@ -6,7 +6,7 @@ function HomePage (props) {
     const isLoggedIn = localStorage.getItem('isLoggedIn');
     const [fetchedData, setFetchedData] = useState(null);
     const [fetchedUsers, setFetchedUsers] = useState(null);
-
+    const [selectedCategory, setSelectedCategory] = useState('data');
 
 
     useEffect(() => {
@@ -87,12 +87,15 @@ function HomePage (props) {
             <div className="sidebar">
                 <p>Department: {localStorage.getItem('department')}</p>
                 <p>Division: {localStorage.getItem('division')}</p>
+                <button onClick={() => setSelectedCategory('data')}>Data</button>
+                <br />
+                <button onClick={() => setSelectedCategory('users')}>Users</button>
             </div>
 
             <div className="content">
                 <p>{userLevel()}</p>
 
-                <Link to="/NetworkManagment">Network Management</Link>
+                {/* <Link to="/NetworkManagment">Network Management</Link>
                 <br />
                 <Link to="/SoftwareReviews">Software Reviews</Link>
                 <br />
@@ -100,31 +103,26 @@ function HomePage (props) {
                 <br />
                 <Link to="/OpinionPublishing">Opinion Publishing</Link>
                 <br />
-                <Link to="/auth">Authorization</Link>
+                <Link to="/auth">Authorization</Link> */}
                 <br />
 
-                {fetchedData && (
-                    <div>
-                        <p>Fetched Data:</p>
-                        <pre>{JSON.stringify(fetchedData, null, 2)}</pre>
-                    </div>
+                {selectedCategory === 'data' && (
+                    <>
+                        {fetchedData && (
+                            <div>
+                                <p>Fetched Data:</p>
+                                <pre>{JSON.stringify(fetchedData, null, 2)}</pre>
+                            </div>
+                        )}
+                    </>
                 )}
 
-
-                {/* Displaying division IDs */}
-                <div>
-                    <p>Division IDs:</p>
-                    <pre>{JSON.stringify(divisionIds, null, 2)}</pre>
-                </div>
-
-                <div>
-                    {localStorage.getItem('level') === 'admin' && (
-                        <div>
-                            <p>Fetched Users:</p>
-                            <pre>{JSON.stringify(fetchedUsers, null, 2)}</pre>
-                        </div>
-                    )}
-                </div>
+                {selectedCategory === 'users' && (
+                    <div>
+                        <p>Fetched Users:</p>
+                        <pre>{JSON.stringify(fetchedUsers, null, 2)}</pre>
+                    </div>
+                )}
             </div>
 
         </>
