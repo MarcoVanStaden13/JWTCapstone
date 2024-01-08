@@ -5,6 +5,7 @@ import '../App.css';
 function HomePage (props) {
     const isLoggedIn = localStorage.getItem('isLoggedIn');
     const [fetchedData, setFetchedData] = useState(null);
+    const [fetchedUsers, setFetchedUsers] = useState(null);
 
 
 
@@ -26,6 +27,26 @@ function HomePage (props) {
                 } else {
                     console.error('Error during data fetch:', response.statusText);
                 }
+
+                // Fetch all users if the user is an admin
+                if (localStorage.getItem('level') === 'admin') {
+                    const usersResponse = await fetch('/allUsers', {
+                        method: 'GET',
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                            'Content-Type': 'application/json',
+                        },
+                    });
+
+                    if (usersResponse.ok) {
+                        const usersData = await usersResponse.json();
+                        console.log('Fetched Users:', usersData);
+                        setFetchedUsers(usersData);
+                    } else {
+                        console.error('Error during users fetch:', usersResponse.statusText);
+                    }
+                }
+
             } catch (error) {
                 console.error('Error during data fetch:', error);
             }
@@ -94,6 +115,15 @@ function HomePage (props) {
                 <div>
                     <p>Division IDs:</p>
                     <pre>{JSON.stringify(divisionIds, null, 2)}</pre>
+                </div>
+
+                <div>
+                    {localStorage.getItem('level') === 'admin' && (
+                        <div>
+                            <p>Fetched Users:</p>
+                            <pre>{JSON.stringify(fetchedUsers, null, 2)}</pre>
+                        </div>
+                    )}
                 </div>
             </div>
 

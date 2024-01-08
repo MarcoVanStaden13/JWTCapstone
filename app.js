@@ -158,26 +158,23 @@ APP.get('/data/:department/:division?', async (req, res) => {
     }
 });
 
-// Add a new endpoint to get all departments and their data
-APP.get('/allDepartments', async (req, res) => {
+// Add a new endpoint to get all users if the user is an admin
+APP.get('/allUsers', async (req, res) => {
     try {
-        // Fetch data for each department
-        const newsManagementData = await NewsManagementModel.find({});
-        const softwareReviewsData = await SoftwareReviewsModel.find({});
-        const hardwareReviewsData = await HardwareReviewsModel.find({});
-        const opinionPublishingData = await OpinionPublishingModel.find({});
+        const auth = req.headers['authorization'];
+        const token = auth.split(' ')[1];
+        const decoded = JWT.verify(token, 'JWT-Secret');
 
-        // Organize the data by department
-        const allDepartments = {
-            news_management: newsManagementData,
-            software_reviews: softwareReviewsData,
-            hardware_reviews: hardwareReviewsData,
-            opinion_publishing: opinionPublishingData,
-        };
+        // Check if the user is an admin
+        if (decoded.level !== 'admin') {
+            return res.status(403).json({ error: 'Access forbidden' });
+        }
 
-        res.json(allDepartments);
+        // Fetch all users
+        const allUsers = await Users.find({});
+        res.json(allUsers);
     } catch (error) {
-        console.error('Error fetching department data:', error);
+        console.error('Error fetching users:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
