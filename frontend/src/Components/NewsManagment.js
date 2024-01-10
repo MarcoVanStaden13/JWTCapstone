@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import '../App.css';
 
-class NetworkManagment extends Component{
+class NewsManagment extends Component{
     render (){
         return (
             <>
-                <p>Network Managment</p>
+                <p>News Managment</p>
                 
                 <Link to="/">Home</Link>
                 <br />
-                <Link to="/NetworkManagment">Network Management</Link>
+                <Link to="/NewsManagment">News Management</Link>
                 <br />
                 <Link to="/SoftwareReviews">Software Reviews</Link>
                 <br />
@@ -25,4 +25,4 @@ class NetworkManagment extends Component{
     }
 }
     
-export default NetworkManagment;
+export default NewsManagment;

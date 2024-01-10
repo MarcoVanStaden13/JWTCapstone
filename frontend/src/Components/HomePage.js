@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
+import NewsManagment from './NewsManagment.js';
+import SoftwareReviews from './SoftwareReviews.js';
+import HardwareReviews from './HardwareReviews.js';
+import OpinionPublishing from './OpinionPublishing.js';
 import '../App.css';
 
 function HomePage (props) {
@@ -76,6 +80,13 @@ function HomePage (props) {
         }
     }
 
+    const userDepartment = () => {
+        if (selectedCategory === 'news_management'){
+            return <NewsManagment />
+        }
+
+    }
+
     // Extracting division IDs
     const divisionIds = fetchedData ? (Array.isArray(fetchedData) ? fetchedData.map(division => division._id) : []) : [];
 
@@ -96,25 +107,43 @@ function HomePage (props) {
             <div className="sidebar">
                 <p>Department: {localStorage.getItem('department')}</p>
                 <p>Division: {localStorage.getItem('division')}</p>
-                <div className="dropdown-container">
-                    <button onClick={toggleDropdown} className="dropdown-button">
-                        Select Category
-                    </button>
-                    {isDropdownOpen && (
-                        <div className="dropdown-content">
-                            <button onClick={() => setSelectedCategory('data')}>Data</button>
-                            <br />
-                            <button onClick={() => setSelectedCategory('users')}>Users</button>
-                            <br />
+                <br />
+
+
+                {localStorage.getItem('level') === 'admin' ? (
+                    <>
+                        <button onClick={() => setSelectedCategory('users')}>Users</button>
+                        <div className="dropdown-container">
+                            <button onClick={toggleDropdown} className="dropdown-button">
+                                Select Category
+                            </button>
+                            {isDropdownOpen && (
+                                <div className="dropdown-content">
+                                    <button onClick={() => setSelectedCategory('data')}>All Data</button>
+                                    <br />
+                                    <button onClick={() => setSelectedCategory('news_management')}>News Management</button>
+                                    <br />
+                                    <button onClick={() => setSelectedCategory('software_reviews')}>Software Reviews</button>
+                                    <br />
+                                    <button onClick={() => setSelectedCategory('hardware_reviews')}>Hardware Reviews</button>
+                                    <br />
+                                    <button onClick={() => setSelectedCategory('opinion_publishing')}>Opinion Publishing</button>
+                                    <br />
+                                    <button onClick={() => setSelectedCategory('users')}>Users</button>
+                                    <br />
+                                </div>
+                            )}
                         </div>
-                    )}
-                </div>
+                    </>
+                ) : (
+                    <button onClick={() => setSelectedCategory('data')}>All Data</button>
+                )}
             </div>
 
             <div className="content">
                 <p>{userLevel()}</p>
 
-                {/* <Link to="/NetworkManagment">Network Management</Link>
+                {/* <Link to="/NewsManagment">News Management</Link>
                 <br />
                 <Link to="/SoftwareReviews">Software Reviews</Link>
                 <br />
@@ -142,6 +171,16 @@ function HomePage (props) {
                         <pre>{JSON.stringify(fetchedUsers, null, 2)}</pre>
                     </div>
                 )}
+
+                {selectedCategory !== 'data' && selectedCategory !== 'users' && fetchedData && (
+                    <div>
+                        {/* Dynamically display information based on the selected category */}
+                        <p>{`Fetched ${selectedCategory}:`}</p>
+                        <pre>{JSON.stringify(fetchedData[selectedCategory], null, 2)}</pre>
+                    </div>
+                )}
+
+
             </div>
 
         </>
