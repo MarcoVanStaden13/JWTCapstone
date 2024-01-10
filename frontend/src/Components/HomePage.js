@@ -131,8 +131,8 @@ function HomePage (props) {
                 <br />
 
 
-                {/* {localStorage.getItem('level') === 'admin' ? (
-                    <> */}
+                {localStorage.getItem('level') === 'admin' ? (
+                    <>
                         <button onClick={() => setSelectedCategory('users')}>Users</button>
                         <div className="dropdown-container">
                             <button onClick={toggleDropdown} className="dropdown-button">
@@ -155,10 +155,25 @@ function HomePage (props) {
                                 </div>
                             )}
                         </div>
-                    {/* </>
+                    </>
                 ) : (
-                    <button onClick={() => setSelectedCategory('data')}>All Data</button>
-                )} */}
+
+                    <>
+                    <button onClick={() => setSelectedCategory('users')}>Users</button>
+                    <div className="dropdown-container">
+                        <button onClick={toggleDropdown} className="dropdown-button">
+                            Select Category
+                        </button>
+                        {isDropdownOpen && (
+                            <div className="dropdown-content">
+                                <button onClick={() => setSelectedCategory(localStorage.getItem('department'))}>{localStorage.getItem('department')}</button>
+                                <br />
+                                <button onClick={() => setSelectedCategory('data')}>All Data</button>
+                            </div>
+                        )}
+                    </div>
+                </>
+                )}
             </div>
 
             <div className="content">
