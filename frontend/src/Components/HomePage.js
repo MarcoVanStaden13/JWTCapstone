@@ -7,6 +7,15 @@ function HomePage (props) {
     const [fetchedData, setFetchedData] = useState(null);
     const [fetchedUsers, setFetchedUsers] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState('data');
+    const [isDropdownOpen, setDropdownOpen] = useState(false);
+  
+    const handleCategoryChange = (event) => {
+      setSelectedCategory(event.target.value);
+    };
+  
+    const toggleDropdown = () => {
+      setDropdownOpen(!isDropdownOpen);
+    };
 
 
     useEffect(() => {
@@ -87,9 +96,19 @@ function HomePage (props) {
             <div className="sidebar">
                 <p>Department: {localStorage.getItem('department')}</p>
                 <p>Division: {localStorage.getItem('division')}</p>
-                <button onClick={() => setSelectedCategory('data')}>Data</button>
-                <br />
-                <button onClick={() => setSelectedCategory('users')}>Users</button>
+                <div className="dropdown-container">
+                    <button onClick={toggleDropdown} className="dropdown-button">
+                        Select Category
+                    </button>
+                    {isDropdownOpen && (
+                        <div className="dropdown-content">
+                            <button onClick={() => setSelectedCategory('data')}>Data</button>
+                            <br />
+                            <button onClick={() => setSelectedCategory('users')}>Users</button>
+                            <br />
+                        </div>
+                    )}
+                </div>
             </div>
 
             <div className="content">
