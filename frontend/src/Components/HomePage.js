@@ -82,9 +82,30 @@ function HomePage (props) {
 
     const userDepartment = () => {
         if (selectedCategory === 'news_management'){
-            return <NewsManagment />
+            if(localStorage.getItem('level') === 'admin'){
+                return <NewsManagment data={JSON.stringify(fetchedData[selectedCategory])}/>
+            } else{
+                return <NewsManagment data={JSON.stringify(fetchedData)}/>
+            }
+        } else if (selectedCategory === 'software_reviews'){
+            if(localStorage.getItem('level') === 'admin'){
+                return <SoftwareReviews data={JSON.stringify(fetchedData[selectedCategory])}/>
+            } else{
+                return <SoftwareReviews data={JSON.stringify(fetchedData)}/>
+            }
+        } else if (selectedCategory === 'hardware_reviews'){
+            if(localStorage.getItem('level') === 'admin'){
+                return <HardwareReviews data={JSON.stringify(fetchedData[selectedCategory])}/>
+            } else{
+                return <HardwareReviews data={JSON.stringify(fetchedData)}/>
+            }
+        } else if (selectedCategory === 'opinion_publishing'){
+            if(localStorage.getItem('level') === 'admin'){
+                return <OpinionPublishing data={JSON.stringify(fetchedData[selectedCategory])}/>
+            } else{
+                return <OpinionPublishing data={JSON.stringify(fetchedData)}/>
+            }
         }
-
     }
 
     // Extracting division IDs
@@ -110,8 +131,8 @@ function HomePage (props) {
                 <br />
 
 
-                {localStorage.getItem('level') === 'admin' ? (
-                    <>
+                {/* {localStorage.getItem('level') === 'admin' ? (
+                    <> */}
                         <button onClick={() => setSelectedCategory('users')}>Users</button>
                         <div className="dropdown-container">
                             <button onClick={toggleDropdown} className="dropdown-button">
@@ -134,10 +155,10 @@ function HomePage (props) {
                                 </div>
                             )}
                         </div>
-                    </>
+                    {/* </>
                 ) : (
                     <button onClick={() => setSelectedCategory('data')}>All Data</button>
-                )}
+                )} */}
             </div>
 
             <div className="content">
@@ -174,9 +195,11 @@ function HomePage (props) {
 
                 {selectedCategory !== 'data' && selectedCategory !== 'users' && fetchedData && (
                     <div>
+                        {userDepartment()}
                         {/* Dynamically display information based on the selected category */}
                         <p>{`Fetched ${selectedCategory}:`}</p>
                         <pre>{JSON.stringify(fetchedData[selectedCategory], null, 2)}</pre>
+
                     </div>
                 )}
 
