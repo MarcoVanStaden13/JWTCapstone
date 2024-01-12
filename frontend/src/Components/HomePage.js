@@ -79,13 +79,13 @@ function HomePage (props) {
 
     const userDepartment = () => {
         if(localStorage.getItem('isLoggedIn')){
-            if (selectedCategory === 'users') {
+            if (selectedCategory === 'users' && localStorage.getItem('level') === 'admin') {
                 return (
                     <>
                         {fetchedData && (
                             <div>
                                 <p>Fetched Data:</p>
-                                <pre>{JSON.stringify(fetchedData, null, 2)}</pre>
+                                <pre>{JSON.stringify(fetchedUsers, null, 2)}</pre>
                             </div>
                         )}
                     </>
