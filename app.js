@@ -236,9 +236,6 @@ APP.put('/updateData/:department/:documentId', async (req, res) => {
     }
 });
 
-
-
-
 // Add a new endpoint to create passwords and usernames
 APP.post('/newData/:department/', async (req, res) => {
     try {
