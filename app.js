@@ -299,7 +299,7 @@ APP.post('/newData/:department/', async (req, res) => {
                 return res.status(400).json({ error: 'Invalid department' });
         }
 
-        res.json({ message: 'Data updated successfully' });
+
     } catch (error) {
         console.error('Error updating data:', error);
         res.status(500).json({ error: 'Internal server error' });
