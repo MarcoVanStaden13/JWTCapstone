@@ -182,7 +182,7 @@ function HomePage (props) {
             </div>
 
             <div className="content">
-                <p>{userLevel()}</p>
+                {userLevel()}
                 <Link to="/auth">Authorization</Link>
                 <br />
                 {userDepartment()}
