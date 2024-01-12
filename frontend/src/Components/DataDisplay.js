@@ -33,7 +33,7 @@ function DataDisplay(props) {
                     .sort() // Sort keys alphabetically
                     .map((division) => (
                         <div key={division}>
-                            <h4>{capitalizeFirstLetter(division)}</h4>
+                            <h4 className='divisionHeader'>{capitalizeFirstLetter(division)}</h4>
                             {groupedData[division].map((item) => (
                                 <div key={item._id}>
                                     <p>{`ID: ${item._id}`}</p>
