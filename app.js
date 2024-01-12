@@ -3,7 +3,8 @@ const BODYPARSER = require('body-parser')
 const mongoose = require('mongoose');
 const APP = EXPRESS()
 const HELMET = require('helmet')
-const JWT = require('jsonwebtoken')
+const JWT = require('jsonwebtoken');
+const { ObjectId } = require('mongodb');
 const PORT = process.env.PORT || 8080
 
 // Use Helmet for enhanced security
@@ -53,14 +54,9 @@ siteDataConnection.once('open', function () {
 });
 
 const siteDataSchema = new mongoose.Schema({
-    _id: String,
-    Logins: {
-        type: Map,
-        of: new mongoose.Schema({
-            username: { type: String, required: true },
-            password: { type: String, required: true },
-        }),
-    },
+    division: { type: String},
+    username: { type: String, required: true},
+    password: { type: String, required: true}
 });
 
 // Define models for SiteData collections
@@ -142,8 +138,8 @@ APP.get('/data/:department/:division?', async (req, res) => {
             }
         } else {
             // Fetch the document from the database based on division
-            const document = await documentModel.findOne({
-                _id: requestedDivision,
+            const document = await documentModel.find({
+                division: requestedDivision,
             });
 
             if (!document) {
@@ -241,8 +237,11 @@ APP.put('/data/:department/:division/:documentId', async (req, res) => {
     }
 });
 
-// Add a new endpoint to update passwords and usernames
-APP.post('/updateData/:department/:division', async (req, res) => {
+
+
+
+// Add a new endpoint to create passwords and usernames
+APP.post('/updateData/:department/', async (req, res) => {
     try {
         const auth = req.headers['authorization'];
         const token = auth.split(' ')[1];
@@ -254,7 +253,7 @@ APP.post('/updateData/:department/:division', async (req, res) => {
         }
 
         const department = req.params.department;
-        const division = req.params.division;
+
         const newData = req.body;
 
         // Choose the appropriate model based on the user's department
@@ -262,32 +261,47 @@ APP.post('/updateData/:department/:division', async (req, res) => {
         switch (department) {
             case 'news_management':
                 documentModel = NewsManagementModel;
+                const newCredentialNM = new NewsManagementModel({
+                    division: newData.division,
+                    username: newData.username,
+                    password: newData.password
+                })
+                await newCredentialNM.save();
+                res.json({ message: 'success' })
                 break;
             case 'software_reviews':
                 documentModel = SoftwareReviewsModel;
+                const newCredentialSR = new SoftwareReviewsModel({
+                    division: newData.division,
+                    username: newData.username,
+                    password: newData.password
+                })
+                await newCredentialSR.save();
+                res.json({ message: 'success' })
                 break;
             case 'hardware_reviews':
                 documentModel = HardwareReviewsModel;
+                const newCredentialHR = new HardwareReviewsModel({
+                    division: newData.division,
+                    username: newData.username,
+                    password: newData.password
+                })
+                await newCredentialHR.save();
+                res.json({ message: 'success' })
                 break;
             case 'opinion_publishing':
                 documentModel = OpinionPublishingModel;
+                const newCredentialOP = new OpinionPublishingModel({
+                    division: newData.division,
+                    username: newData.username,
+                    password: newData.password
+                })
+                await newCredentialOP.save();
+                res.json({ message: 'success' })
                 break;
             default:
                 return res.status(400).json({ error: 'Invalid department' });
         }
-
-        // Find the document based on department and division
-        const document = await documentModel.findOne({ _id: division });
-
-        if (!document) {
-            return res.status(404).json({ error: 'Document not found' });
-        }
-
-        // Update or add new Logins data
-        document.Logins = newData;
-
-        // Save the updated document
-        await document.save();
 
         res.json({ message: 'Data updated successfully' });
     } catch (error) {
@@ -295,6 +309,10 @@ APP.post('/updateData/:department/:division', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
+
+
 
 APP.post('/login', async (req, res) => {
     const uName = req.body.username
