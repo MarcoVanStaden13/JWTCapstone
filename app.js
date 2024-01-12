@@ -176,7 +176,7 @@ APP.get('/allUsers', async (req, res) => {
 });
 
 // Add a new route for updating SiteData
-APP.put('/data/:department/:division/:documentId', async (req, res) => {
+APP.put('/updateData/:department/:documentId', async (req, res) => {
     const auth = req.headers['authorization'];
     const token = auth.split(' ')[1];
 
@@ -188,11 +188,10 @@ APP.put('/data/:department/:division/:documentId', async (req, res) => {
         const userDivision = decoded.division;
 
         const requestedDepartment = req.params.department;
-        const requestedDivision = req.params.division || 'all'; // Default to 'all' if division is not provided
         const documentId = req.params.documentId;
 
         // Check if the user is accessing their own department
-        if (userLevel === 'normal' && (userDepartment !== requestedDepartment || userDivision !== requestedDivision)) {
+        if (userLevel === 'normal' && (userDepartment !== requestedDepartment)) {
             return res.status(403).json({ error: 'Access forbidden' });
         }
 
@@ -241,7 +240,7 @@ APP.put('/data/:department/:division/:documentId', async (req, res) => {
 
 
 // Add a new endpoint to create passwords and usernames
-APP.post('/updateData/:department/', async (req, res) => {
+APP.post('/newData/:department/', async (req, res) => {
     try {
         const auth = req.headers['authorization'];
         const token = auth.split(' ')[1];
