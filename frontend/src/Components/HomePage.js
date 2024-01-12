@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
-import NewsManagment from './NewsManagment.js';
-import SoftwareReviews from './SoftwareReviews.js';
-import HardwareReviews from './HardwareReviews.js';
-import OpinionPublishing from './OpinionPublishing.js';
+import DataDisplay from './DataDisplay.js';
 import '../App.css';
 
 function HomePage (props) {
@@ -81,32 +78,40 @@ function HomePage (props) {
     }
 
     const userDepartment = () => {
-        if (selectedCategory === 'news_management'){
-            if(localStorage.getItem('level') === 'admin'){
-                return <NewsManagment data={JSON.stringify(fetchedData[selectedCategory])}/>
-            } else{
-                return <NewsManagment data={JSON.stringify(fetchedData)}/>
+        if(localStorage.getItem('isLoggedIn')){
+            if (selectedCategory === 'users') {
+                return (
+                    <>
+                        {fetchedData && (
+                            <div>
+                                <p>Fetched Data:</p>
+                                <pre>{JSON.stringify(fetchedData, null, 2)}</pre>
+                            </div>
+                        )}
+                    </>
+                );
+            } else if (selectedCategory === 'data') {
+                return (
+                    <>
+                        {fetchedData && (
+                            <div>
+                                <p>Fetched Data:</p>
+                                <pre>{JSON.stringify(fetchedData, null, 2)}</pre>
+                            </div>
+                        )}
+                    </>
+                );
+            } else {
+                if (localStorage.getItem('level') === 'admin') {
+                    return <DataDisplay data={JSON.stringify(fetchedData[selectedCategory])} />;
+                } else {
+                    return <DataDisplay data={JSON.stringify(fetchedData)} />;
+                }
             }
-        } else if (selectedCategory === 'software_reviews'){
-            if(localStorage.getItem('level') === 'admin'){
-                return <SoftwareReviews data={JSON.stringify(fetchedData[selectedCategory])}/>
-            } else{
-                return <SoftwareReviews data={JSON.stringify(fetchedData)}/>
-            }
-        } else if (selectedCategory === 'hardware_reviews'){
-            if(localStorage.getItem('level') === 'admin'){
-                return <HardwareReviews data={JSON.stringify(fetchedData[selectedCategory])}/>
-            } else{
-                return <HardwareReviews data={JSON.stringify(fetchedData)}/>
-            }
-        } else if (selectedCategory === 'opinion_publishing'){
-            if(localStorage.getItem('level') === 'admin'){
-                return <OpinionPublishing data={JSON.stringify(fetchedData[selectedCategory])}/>
-            } else{
-                return <OpinionPublishing data={JSON.stringify(fetchedData)}/>
-            }
+        } else {
+            return (<></>)
         }
-    }
+    };
 
     // Extracting division IDs
     const divisionIds = fetchedData ? (Array.isArray(fetchedData) ? fetchedData.map(division => division._id) : []) : [];
@@ -178,6 +183,10 @@ function HomePage (props) {
 
             <div className="content">
                 <p>{userLevel()}</p>
+                <Link to="/auth">Authorization</Link>
+                <br />
+                {userDepartment()}
+
 
                 {/* <Link to="/NewsManagment">News Management</Link>
                 <br />
@@ -190,7 +199,7 @@ function HomePage (props) {
                 <Link to="/auth">Authorization</Link> */}
                 <br />
 
-                {selectedCategory === 'data' && (
+                {/* {selectedCategory === 'data' && (
                     <>
                         {fetchedData && (
                             <div>
@@ -208,15 +217,15 @@ function HomePage (props) {
                     </div>
                 )}
 
-                {selectedCategory !== 'data' && selectedCategory !== 'users' && fetchedData && (
+                {/* {selectedCategory !== 'data' && selectedCategory !== 'users' && fetchedData && (
                     <div>
-                        {userDepartment()}
-                        {/* Dynamically display information based on the selected category */}
+                        
+                        {/* Dynamically display information based on the selected category }
                         <p>{`Fetched ${selectedCategory}:`}</p>
                         <pre>{JSON.stringify(fetchedData[selectedCategory], null, 2)}</pre>
 
                     </div>
-                )}
+                )} */}
 
 
             </div>

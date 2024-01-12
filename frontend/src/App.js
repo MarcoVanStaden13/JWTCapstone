@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import { Routes, Route, Navigate  } from "react-router-dom";
 import HomePage from './Components/HomePage.js';
-import NewsManagment from './Components/NewsManagment.js';
-import SoftwareReviews from './Components/SoftwareReviews.js';
-import HardwareReviews from './Components/HardwareReviews.js';
-import OpinionPublishing from './Components/OpinionPublishing.js';
 import AuthPanel from './Components/AuthPanel.js'
 import './App.css';
 
@@ -103,11 +99,7 @@ class App extends Component{
                         />
                     } />
                     <Route path="/auth" element={<AuthPanel handleSignIn={this.handleSignIn} />} />
-          
-                    <Route exact path="/NewsManagment" element={<NewsManagment />}/>
-                    <Route exact path="/SoftwareReviews" element={<SoftwareReviews />}/>
-                    <Route exact path="/HardwareReviews" element={<HardwareReviews />}/>
-                    <Route exact path="/OpinionPublishing" element={<OpinionPublishing />}/>             
+                  
                 </Routes>
                 {/* <NewsManagment />
                 <SoftwareReviews />

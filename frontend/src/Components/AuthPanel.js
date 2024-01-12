@@ -159,13 +159,7 @@ class AuthPanel extends Component {
                 <p>{isLogin ? 'Login' : 'Registration'} page</p>
                 <Link to="/">Home</Link>
                 <br />
-                <Link to="/NewsManagment">News Management</Link>
-                <br />
-                <Link to="/SoftwareReviews">Software Reviews</Link>
-                <br />
-                <Link to="/HardwareReviews">Hardware Reviews</Link>
-                <br />
-                <Link to="/OpinionPublishing">Opinion Publishing</Link>
+
             </>
         );
     }
