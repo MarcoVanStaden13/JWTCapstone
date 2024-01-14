@@ -4,7 +4,6 @@ import '../App.css';
 
 function DataDisplay(props) {
     const [fetchedData, setFetchedData] = useState([]);
-    const [isEditing, setIsEditing] = useState(false);
     const [editingItemId, setEditingItemId] = useState(null);
     
     useEffect(() => {
@@ -97,6 +96,7 @@ function DataDisplay(props) {
                             <div key={item._id}>
                                {editingItemId === item._id ? (
                                     <form onSubmit={(e) => handleFormSubmit(e, item._id)}>
+                                        <label for='username'>Username: </label>
                                     <input
                                         type="text"
                                         name="username"
@@ -104,6 +104,8 @@ function DataDisplay(props) {
                                         value={item.username || ''}
                                         onChange={(e) => handleInputChange(e, item._id)}
                                     />
+                                    <br />
+                                    <lable for='password'>Password: </lable>
                                     <input
                                         type="text"
                                         name="password"
@@ -111,6 +113,7 @@ function DataDisplay(props) {
                                         value={item.password || ''}
                                         onChange={(e) => handleInputChange(e, item._id)}
                                     />
+                                    <br />
                                     <button type="submit">Submit</button>
                                     <button type="button" onClick={handleCancelClick}>
                                         Cancel
@@ -118,16 +121,20 @@ function DataDisplay(props) {
                                     </form>
                                 ) : (
                                     <>
-                                        <p>{`ID: ${item._id}`}</p>
-                                        <p>{`Username: ${item.username}`}</p>
-                                        <p>{`Password: ${item.password}`}</p>
-
-                                        {isAdminOrManager() && (
-                                            <button onClick={() => handleEditClick(item._id)}>
-                                                Edit
-                                            </button>
-                                        )}
-
+                                        <div className='dataDisplayLayout'>
+                                            <div className='dataDisplayTopLeft'>
+                                                <p>{`ID: ${item._id}`}</p>
+                                                <p>{`Username: ${item.username}`}</p>
+                                                <p>{`Password: ${item.password}`}</p>
+                                            </div>
+                                            <div className='dataDisplayTopRight'>
+                                                {isAdminOrManager() && (
+                                                    <button onClick={() => handleEditClick(item._id)}>
+                                                        Edit
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
                                         <hr />
                                     </>
                                 )}

@@ -185,3 +185,24 @@
   margin-right: 30px;
   margin-top: 5pt;
 }
+
+.dataDisplayLayout {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch; /* Ensure the container takes up full height */
+}
+
+.dataDisplayTopLeft {
+  order: -1; /* Move this element to the start of the flex container */
+
+  justify-content: space-between;
+}
+
+.dataDisplayTopRight {
+  order: 1; /* Move this element to the start of the flex container */
+}
+
+.divisionHeader{
+  background-color: #118ab21d;
+  padding: 10px;
+}
