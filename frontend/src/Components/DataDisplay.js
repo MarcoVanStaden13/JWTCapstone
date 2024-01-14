@@ -77,6 +77,11 @@ function DataDisplay(props) {
     
         setEditingItemId(null);
     };
+
+    const isAdminOrManager = () => {
+        const userLevel = localStorage.getItem('level');
+        return userLevel === 'admin' || userLevel === 'manager';
+    };
     
 
     return (
@@ -117,7 +122,11 @@ function DataDisplay(props) {
                                         <p>{`Username: ${item.username}`}</p>
                                         <p>{`Password: ${item.password}`}</p>
 
-                                        <button onClick={() => handleEditClick(item._id)}>Edit</button>
+                                        {isAdminOrManager() && (
+                                            <button onClick={() => handleEditClick(item._id)}>
+                                                Edit
+                                            </button>
+                                        )}
 
                                         <hr />
                                     </>
