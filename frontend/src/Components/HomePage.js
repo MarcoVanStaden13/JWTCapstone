@@ -86,6 +86,15 @@ function HomePage (props) {
                         {fetchedData && (
                             <div>
                                 <UserDisplayPage data={JSON.stringify(fetchedUsers, null, 2)}/>
+                            </div>
+                        )}
+                    </>
+                );
+            } else if (selectedCategory === 'usersData' && localStorage.getItem('level') === 'admin') {
+                return (
+                    <>
+                        {fetchedData && (
+                            <div>
                                 <p>Fetched Data:</p>
                                 <pre>{JSON.stringify(fetchedUsers, null, 2)}</pre>
                             </div>
@@ -148,6 +157,8 @@ function HomePage (props) {
                             {isDropdownOpen && (
                                 <div className="dropdown-content">
                                     <button onClick={() => setSelectedCategory('data')}>All Data</button>
+                                    <br />
+                                    <button onClick={() => setSelectedCategory('usersData')}>Users Data</button>
                                     <br />
                                     <button onClick={() => setSelectedCategory('news_management')}>News Management</button>
                                     <br />
