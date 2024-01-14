@@ -5,8 +5,7 @@ import '../App.css';
 function DataDisplay(props) {
     const [fetchedData, setFetchedData] = useState([]);
     const [editingItemId, setEditingItemId] = useState(null);
-    const [addingCredential, setAddingCredential] = useState(false);
-    const [addingCredentialForDivision, setAddingCredentialForDivision] = useState(null); // Track the division for which to add a credential
+    const [addingCredentialForDivision, setAddingCredentialForDivision] = useState(null);
     const [newCredential, setNewCredential] = useState({
         division: '',
         username: '',
