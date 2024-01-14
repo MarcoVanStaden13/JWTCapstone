@@ -306,8 +306,56 @@ APP.post('/newData/:department/', async (req, res) => {
     }
 });
 
+// Add a new endpoint for assigning and designing users
+APP.put('/assignUser/:userId', async (req, res) => {
+    const auth = req.headers['authorization'];
+    const token = auth.split(' ')[1];
+
+    try {
+        const decoded = JWT.verify(token, 'JWT-Secret');
+
+        // Check if the user is an admin
+        if (decoded.level !== 'admin') {
+            return res.status(403).json({ error: 'Access forbidden' });
+        }
+
+        const userId = req.params.userId;
+        const { department, division } = req.body;
+
+        // Update the user's department and division
+        await Users.findByIdAndUpdate(userId, { department, division });
+
+        res.json({ message: 'User assigned successfully' });
+    } catch (err) {
+        res.status(401).send({ err: 'Bad JWT!' });
+    }
+});
 
 
+// Add a new endpoint for changing a user's role
+APP.put('/changeUserRole/:userId', async (req, res) => {
+    const auth = req.headers['authorization'];
+    const token = auth.split(' ')[1];
+
+    try {
+        const decoded = JWT.verify(token, 'JWT-Secret');
+
+        // Check if the user is an admin
+        if (decoded.level !== 'admin') {
+            return res.status(403).json({ error: 'Access forbidden' });
+        }
+
+        const userId = req.params.userId;
+        const { newRole } = req.body;
+
+        // Update the user's role
+        await Users.findByIdAndUpdate(userId, { role: newRole });
+
+        res.json({ message: 'User role changed successfully' });
+    } catch (err) {
+        res.status(401).send({ err: 'Bad JWT!' });
+    }
+});
 
 
 APP.post('/login', async (req, res) => {
