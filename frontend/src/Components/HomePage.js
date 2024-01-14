@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import DataDisplay from './DataDisplay.js';
+import UserDisplayPage from './UserDisplayPage.js';
 import '../App.css';
 
 function HomePage (props) {
@@ -84,6 +85,7 @@ function HomePage (props) {
                     <>
                         {fetchedData && (
                             <div>
+                                <UserDisplayPage data={JSON.stringify(fetchedUsers, null, 2)}/>
                                 <p>Fetched Data:</p>
                                 <pre>{JSON.stringify(fetchedUsers, null, 2)}</pre>
                             </div>
