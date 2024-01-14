@@ -193,16 +193,20 @@
 }
 
 .dataDisplayTopLeft {
-  order: -1; /* Move this element to the start of the flex container */
-
+  order: -1;
   justify-content: space-between;
 }
 
 .dataDisplayTopRight {
-  order: 1; /* Move this element to the start of the flex container */
+  order: 1;
 }
 
 .divisionHeader{
   background-color: #118ab21d;
   padding: 10px;
+}
+
+.pageDepartment{
+  display: flex;
+  justify-content: center;
 }

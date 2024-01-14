@@ -85,7 +85,7 @@ function DataDisplay(props) {
 
     return (
         <>
-            <p>{capitalizeFirstLetter(props.department)}</p>
+            <h1 className='pageDepartment'>{capitalizeFirstLetter(props.department)}</h1>
             <div className="DataDisplay">
                 {Object.keys(groupedData)
                 .sort() // Sort keys alphabetically
