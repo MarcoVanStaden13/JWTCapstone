@@ -103,9 +103,9 @@ function HomePage (props) {
                 );
             } else {
                 if (localStorage.getItem('level') === 'admin') {
-                    return <DataDisplay data={JSON.stringify(fetchedData[selectedCategory])} />;
+                    return <DataDisplay data={JSON.stringify(fetchedData[selectedCategory])} department={selectedCategory} />;
                 } else {
-                    return <DataDisplay data={JSON.stringify(fetchedData)} />;
+                    return <DataDisplay data={JSON.stringify(fetchedData)} department={selectedCategory} />;
                 }
             }
         } else {
