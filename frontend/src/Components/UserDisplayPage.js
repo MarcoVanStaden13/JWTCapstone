@@ -15,10 +15,10 @@ function UserDisplayPage(props) {
 
     // Group data by division
     fetchedData.forEach((item) => {
-        if (!groupedData[item.division]) {
-            groupedData[item.division] = [];
+        if (!groupedData[item.role]) {
+            groupedData[item.role] = [];
         }
-        groupedData[item.division].push(item);
+        groupedData[item.role].push(item);
     });
 
     const capitalizeFirstLetter = (string) => {
@@ -51,7 +51,6 @@ function UserDisplayPage(props) {
                 const updatedUser = await response.json();
                 console.log('User Role Changed:', updatedUser);
 
-                // Update the state or re-fetch data as needed
                 const updatedData = fetchedData.map((user) =>
                     user._id === userId ? { ...user, role: newRole } : user
                 );
@@ -82,36 +81,40 @@ function UserDisplayPage(props) {
                                 <div key={user._id}>
                                     {editingUserId === user._id ? (
                                         <>
-                                            <p>Username: {capitalizeFirstLetter(user.username)}</p>
+                                            <p>Username: {user.username}</p>
                                             <label htmlFor='newRole'>New Role: </label>
-                                            <input
-                                                type="text"
+                                            <select
                                                 name="newRole"
-                                                placeholder="Enter new role"
                                                 value={newRole}
                                                 onChange={(e) => setNewRole(e.target.value)}
-                                            />
-                                            <br />
+                                            >
+                                                <option value="admin">Admin</option>
+                                                <option value="manager">Manager</option>
+                                                <option value="normal">User</option>
+                                            </select>
                                             <button onClick={() => handleRoleChange(user._id)}>
                                                 Change Role
                                             </button>
                                             <button type="button" onClick={handleCancelEdit}>
                                                 Cancel
                                             </button>
+                                            <p>{`Department: ${user.department}`}</p>
+                                            <p>{`Division: ${user.division}`}</p>
                                             <hr />
                                         </>
                                     ) : (
                                         <>
                                             {/* User Information */}
                                             <p>{`Username: ${user.username}`}</p>
-                                            <p>{`Role: ${user.role}`}</p>
+                                            <p>
+                                                {`Role: ${user.role}`}
+                                                <button onClick={() => handleEditClick(user._id)}>
+                                                    Edit
+                                                </button>
+                                            </p>
                                             <p>{`Department: ${user.department}`}</p>
                                             <p>{`Division: ${user.division}`}</p>
 
-                                            {/* Edit Button */}
-                                            <button onClick={() => handleEditClick(user._id)}>
-                                                Edit
-                                            </button>
                                             <hr />
                                         </>
                                     )}
