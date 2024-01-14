@@ -6,8 +6,6 @@ function UserDisplayPage(props) {
     const [fetchedData, setFetchedData] = useState([]);
     const [editingUserId, setEditingUserId] = useState(null);
     const [newRole, setNewRole] = useState('');
-    const [assignDivision, setAssignDivision] = useState('');
-    const [assignDepartment, setAssignDepartment] = useState('');
 
     useEffect(() => {
         setFetchedData(JSON.parse(props.data) || []);
@@ -52,7 +50,12 @@ function UserDisplayPage(props) {
             if (response.ok) {
                 const updatedUser = await response.json();
                 console.log('User Role Changed:', updatedUser);
+
                 // Update the state or re-fetch data as needed
+                const updatedData = fetchedData.map((user) =>
+                    user._id === userId ? { ...user, role: newRole } : user
+                );
+                setFetchedData(updatedData);
             } else {
                 console.error('Error changing user role:', response.statusText);
                 // Handle error (if needed)
@@ -63,36 +66,6 @@ function UserDisplayPage(props) {
         } finally {
             setEditingUserId(null);
             setNewRole('');
-        }
-    };
-
-    const handleAssignDesign = async (userId) => {
-        try {
-            const auth = localStorage.getItem('token');
-            const response = await fetch(`/assignUser/${userId}`, {
-                method: 'PUT',
-                headers: {
-                    Authorization: `Bearer ${auth}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ department: assignDepartment, division: assignDivision }),
-            });
-
-            if (response.ok) {
-                const updatedUser = await response.json();
-                console.log('User Assigned/Designed:', updatedUser);
-                // Update the state or re-fetch data as needed
-            } else {
-                console.error('Error assigning/designing user:', response.statusText);
-                // Handle error (if needed)
-            }
-        } catch (error) {
-            console.error('Error assigning/designing user:', error);
-            // Handle error (if needed)
-        } finally {
-            setEditingUserId(null);
-            setAssignDepartment('');
-            setAssignDivision('');
         }
     };
 
