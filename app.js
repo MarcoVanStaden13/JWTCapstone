@@ -87,8 +87,6 @@ APP.get('/data/:department/:division?', async (req, res) => {
 
 
         if (userLevel === 'admin') {
-            console.log('Admin level access');
-
             // Fetch all documents in all collections
             const allDocuments = await Promise.all([
                 NewsManagementModel.find({}),
