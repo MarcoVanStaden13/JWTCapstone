@@ -5,6 +5,13 @@ import '../App.css';
 function DataDisplay(props) {
     const [fetchedData, setFetchedData] = useState([]);
     const [editingItemId, setEditingItemId] = useState(null);
+    const [addingCredential, setAddingCredential] = useState(false);
+    const [addingCredentialForDivision, setAddingCredentialForDivision] = useState(null); // Track the division for which to add a credential
+    const [newCredential, setNewCredential] = useState({
+        division: '',
+        username: '',
+        password: '',
+    });
     
     useEffect(() => {
         setFetchedData(JSON.parse(props.data) || []);
@@ -64,14 +71,11 @@ function DataDisplay(props) {
             if (response.ok) {
                 const updatedDocument = await response.json();
                 console.log('Updated Document:', updatedDocument);
-                // Handle success (if needed)
             } else {
                 console.error('Error updating data:', response.statusText);
-                // Handle error (if needed)
             }
         } catch (error) {
             console.error('Error updating data:', error);
-            // Handle error (if needed)
         }
     
         setEditingItemId(null);
@@ -83,6 +87,67 @@ function DataDisplay(props) {
     };
     
 
+    const handleAddCredentialClick = (division) => {
+        setAddingCredentialForDivision(division);
+        setNewCredential({
+            division,
+            username: '',
+            password: '',
+        });
+    };
+
+    const handleCancelAddCredential = () => {
+        setAddingCredentialForDivision(null);
+        setNewCredential({
+            division: '',
+            username: '',
+            password: '',
+        });
+    };
+
+    const handleAddCredentialSubmit = async (e, division) => {
+        e.preventDefault();
+    
+        // Check if username and password are non-empty
+        if (!newCredential.username || !newCredential.password) {
+            console.error('Username and password are required');
+            return;
+        }
+    
+        try {
+            const auth = localStorage.getItem('token');
+            const response = await fetch(`/newData/${props.department}`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${auth}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    division,
+                    username: newCredential.username,
+                    password: newCredential.password,
+                }),
+            });
+    
+            if (response.ok) {
+                // Update the state or re-fetch data as needed
+                const newData = await response.json();
+                console.log('New Credential Added:', newData);
+                setAddingCredentialForDivision(null); // Reset the state
+                setNewCredential({
+                    username: '',
+                    password: '',
+                });
+            } else {
+                console.error('Error adding new credential:', response.statusText);
+                // Handle error (if needed)
+            }
+        } catch (error) {
+            console.error('Error adding new credential:', error);
+            // Handle error (if needed)
+        }
+    };
+
     return (
         <>
             <h1 className='pageDepartment'>{capitalizeFirstLetter(props.department)}</h1>
@@ -91,7 +156,42 @@ function DataDisplay(props) {
                 .sort() // Sort keys alphabetically
                 .map((division) => (
                     <div key={division}>
-                        <h4 className="divisionHeader">{capitalizeFirstLetter(division)}</h4>
+                        <div className='divisionHeader'>
+                            <h4 className='divisionHeaderText'>{capitalizeFirstLetter(division)}</h4>
+                            <button
+                                className='divisionHeaderButton'
+                                onClick={() => handleAddCredentialClick(division)}
+                                disabled={addingCredentialForDivision !== null}
+                            >
+                                +
+                            </button>
+                            {addingCredentialForDivision === division && (
+                                <form onSubmit={(e) => handleAddCredentialSubmit(e, division)}>
+                                    {/* Form fields for new credential */}
+                                    <label htmlFor='new-username'>New Username: </label>
+                                    <input
+                                        type="text"
+                                        id="new-username"
+                                        name="username"
+                                        value={newCredential.username}
+                                        onChange={(e) => setNewCredential({ ...newCredential, username: e.target.value })}
+                                    />
+
+                                    <label htmlFor='new-password'>New Password: </label>
+                                    <input
+                                        type="text"
+                                        id="new-password"
+                                        name="password"
+                                        value={newCredential.password}
+                                        onChange={(e) => setNewCredential({ ...newCredential, password: e.target.value })}
+                                    />
+                                    <button type="submit">Add Credential</button>
+                                    <button type="button" onClick={handleCancelAddCredential}>
+                                        Cancel
+                                    </button>
+                                </form>
+                            )}
+                        </div>
                         {groupedData[division].map((item) => (
                             <div key={item._id}>
                                {editingItemId === item._id ? (
