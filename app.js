@@ -296,8 +296,6 @@ APP.post('/newData/:department/', async (req, res) => {
             default:
                 return res.status(400).json({ error: 'Invalid department' });
         }
-
-
     } catch (error) {
         console.error('Error updating data:', error);
         res.status(500).json({ error: 'Internal server error' });
