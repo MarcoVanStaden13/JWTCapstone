@@ -101,7 +101,7 @@
 /* Sidebar styling */
 .sidebar {
   position: fixed;
-  top: 60px; /* Adjust based on your navbar height */
+  top: 60px;
   height: 100%;
   width: 200px;
   background-color: #f0f0f0;
@@ -125,9 +125,9 @@
 
 /* Content styling */
 .content {
-  margin-left: 250px; /* Adjust based on your sidebar width */
+  margin-left: 250px;
   padding: 20px;
-  margin-top: 60px; /* Adjust based on your navbar height */
+  margin-top: 60px;
 }
 
 
@@ -180,7 +180,7 @@
 .dataDisplayLayout {
   display: flex;
   justify-content: space-between;
-  align-items: stretch; /* Ensure the container takes up full height */
+  align-items: stretch;
 }
 
 .dataDisplayTopLeft {
@@ -200,4 +200,19 @@
 .pageDepartment{
   display: flex;
   justify-content: center;
+}
+
+.cancelButton:hover{
+  color:rgba(255, 0, 0, 0.476);
+}
+
+.submitButton:hover{
+  color: rgb(91, 239, 91, 0.476);
+}
+
+.editButton:hover{
+
+  all: native;
+  background-color: rgba(229, 239, 91, 0.476) !important;
+
 }

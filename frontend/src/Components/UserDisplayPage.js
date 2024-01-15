@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '../App.css';
 
 function UserDisplayPage(props) {
+    
     const [fetchedData, setFetchedData] = useState([]);
     const [editingUserId, setEditingUserId] = useState(null);
     const [newRole, setNewRole] = useState('');
@@ -91,11 +92,11 @@ function UserDisplayPage(props) {
                                                 <option value="admin">Admin</option>
                                                 <option value="manager">Manager</option>
                                                 <option value="normal">User</option>
-                                            </select>
-                                            <button onClick={() => handleRoleChange(user._id)}>
+                                            </select>&emsp;
+                                            <button className='submitButton' onClick={() => handleRoleChange(user._id)}>
                                                 Change Role
-                                            </button>
-                                            <button type="button" onClick={handleCancelEdit}>
+                                            </button>&emsp;
+                                            <button className='cancelButton' type="button" onClick={handleCancelEdit}>
                                                 Cancel
                                             </button>
                                             <p>{`Department: ${user.department}`}</p>
@@ -107,8 +108,8 @@ function UserDisplayPage(props) {
                                             {/* User Information */}
                                             <p>{`Username: ${user.username}`}</p>
                                             <p>
-                                                {`Role: ${user.role}`}
-                                                <button onClick={() => handleEditClick(user._id)}>
+                                                {`Role: ${user.role}`}&nbsp;
+                                                <button className='editButton' onClick={() => handleEditClick(user._id)}>
                                                     Edit
                                                 </button>
                                             </p>

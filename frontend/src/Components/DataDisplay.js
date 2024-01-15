@@ -184,8 +184,8 @@ function DataDisplay(props) {
                                         value={newCredential.password}
                                         onChange={(e) => setNewCredential({ ...newCredential, password: e.target.value })}
                                     />
-                                    <button type="submit">Add Credential</button>
-                                    <button type="button" onClick={handleCancelAddCredential}>
+                                    <button className='submitButton' type="submit">Add Credential</button>
+                                    <button className='cancelButton' type="button" onClick={handleCancelAddCredential}>
                                         Cancel
                                     </button>
                                 </form>
@@ -213,8 +213,8 @@ function DataDisplay(props) {
                                         onChange={(e) => handleInputChange(e, item._id)}
                                     />
                                     <br />
-                                    <button type="submit">Submit</button>
-                                    <button type="button" onClick={handleCancelClick}>
+                                    <button className='submitButton' type="submit">Submit</button>
+                                    <button className='cancelButton' type="button" onClick={handleCancelClick}>
                                         Cancel
                                     </button>
                                     </form>
@@ -228,7 +228,7 @@ function DataDisplay(props) {
                                             </div>
                                             <div className='dataDisplayTopRight'>
                                                 {isAdminOrManager() && (
-                                                    <button onClick={() => handleEditClick(item._id)}>
+                                                    <button className='editButton' onClick={() => handleEditClick(item._id)}>
                                                         Edit
                                                     </button>
                                                 )}
