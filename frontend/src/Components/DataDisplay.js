@@ -83,7 +83,6 @@ function DataDisplay(props) {
         } catch (error) {
             console.error('Error updating data:', error);
         }
-    
         setEditingItemId(null);
     };
 
@@ -211,7 +210,7 @@ function DataDisplay(props) {
                         {/* Display credentials for the division */}
                         {groupedData[division].map((item) => (
                             <div key={item._id}>
-                               {editingItemId === item._id ? (
+                                {editingItemId === item._id ? (
                                     <form onSubmit={(e) => handleFormSubmit(e, item._id)}>
                                         <label for='username'>Username: </label>
                                     <input
@@ -262,12 +261,6 @@ function DataDisplay(props) {
                     </div>
                 ))}
             </div>
-
-            <Link to="/">Home</Link>
-            <br />
-
-            <Link to="/AuthPanel">AuthPanel</Link>
-            <br />
         </>
     );
 }

@@ -43,7 +43,6 @@ function AssignDesign(props) {
         } catch (error) {
             console.error('Error unassigning user:', error);
             // Handle error (if needed)
-
         }
     };
     

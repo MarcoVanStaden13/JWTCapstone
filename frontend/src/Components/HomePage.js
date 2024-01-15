@@ -193,10 +193,8 @@ function HomePage (props) {
             <div className="content">
                 {userDepartment()}
             </div>
-
         </>
     );
-
 }
     
 export default HomePage;

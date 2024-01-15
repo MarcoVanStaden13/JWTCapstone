@@ -84,61 +84,61 @@ function UserDisplayPage(props) {
             {/* User Display Section */}
             <div className="UserDisplay">
                 {Object.keys(groupedData)
-                    .sort()
-                    .map((division) => (
-                        <div key={division}>
-                            {/* Division Header */}
-                            <h4 className="divisionHeader">{capitalizeFirstLetter(division)}</h4>
+                .sort()
+                .map((division) => (
+                    <div key={division}>
+                        {/* Division Header */}
+                        <h4 className="divisionHeader">{capitalizeFirstLetter(division)}</h4>
 
-                            {/* User Information */}
-                            {groupedData[division].map((user) => (
-                                <div key={user._id}>
-                                    {editingUserId === user._id ? (
-                                        // Edit Mode
-                                        <>
-                                            <p>Username: {user.username}</p>
-                                            <label htmlFor='newRole'>New Role: </label>
-                                            <select
-                                                name="newRole"
-                                                value={newRole}
-                                                onChange={(e) => setNewRole(e.target.value)}
-                                            >
-                                                <option value="" disabled selected hidden>Set user role</option>
-                                                <option value="admin">Admin</option>
-                                                <option value="manager">Manager</option>
-                                                <option value="normal">User</option>
-                                            </select>&emsp;
-                                            <button className='submitButton' onClick={() => handleRoleChange(user._id)}>
-                                                Change Role
-                                            </button>&emsp;
-                                            <button className='cancelButton' type="button" onClick={handleCancelEdit}>
-                                                Cancel
+                        {/* User Information */}
+                        {groupedData[division].map((user) => (
+                            <div key={user._id}>
+                                {editingUserId === user._id ? (
+                                    // Edit Mode
+                                    <>
+                                        <p>Username: {user.username}</p>
+                                        <label htmlFor='newRole'>New Role: </label>
+                                        <select
+                                            name="newRole"
+                                            value={newRole}
+                                            onChange={(e) => setNewRole(e.target.value)}
+                                        >
+                                            <option value="" disabled selected hidden>Set user role</option>
+                                            <option value="admin">Admin</option>
+                                            <option value="manager">Manager</option>
+                                            <option value="normal">User</option>
+                                        </select>&emsp;
+                                        <button className='submitButton' onClick={() => handleRoleChange(user._id)}>
+                                            Change Role
+                                        </button>&emsp;
+                                        <button className='cancelButton' type="button" onClick={handleCancelEdit}>
+                                            Cancel
+                                        </button>
+                                        <p>{`Department: ${user.department}`}</p>
+                                        <p>{`Division: ${user.division}`}</p>
+                                        <hr />
+                                    </>
+                                ) : (
+                                    // Display Mode
+                                    <>
+                                        {/* User Information */}
+                                        <p>{`Username: ${user.username}`}</p>
+                                        <p>
+                                            {`Role: ${user.role}`}&nbsp;
+                                            <button className='editButton' onClick={() => handleEditClick(user._id)}>
+                                                Edit
                                             </button>
-                                            <p>{`Department: ${user.department}`}</p>
-                                            <p>{`Division: ${user.division}`}</p>
-                                            <hr />
-                                        </>
-                                    ) : (
-                                        // Display Mode
-                                        <>
-                                            {/* User Information */}
-                                            <p>{`Username: ${user.username}`}</p>
-                                            <p>
-                                                {`Role: ${user.role}`}&nbsp;
-                                                <button className='editButton' onClick={() => handleEditClick(user._id)}>
-                                                    Edit
-                                                </button>
-                                            </p>
-                                            <p>{`Department: ${user.department}`}</p>
-                                            <p>{`Division: ${user.division}`}</p>
-                                            <AssignDesign userData={user} siteData={props.siteData}/>
-                                            <hr />
-                                        </>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    ))}
+                                        </p>
+                                        <p>{`Department: ${user.department}`}</p>
+                                        <p>{`Division: ${user.division}`}</p>
+                                        <AssignDesign userData={user} siteData={props.siteData}/>
+                                        <hr />
+                                    </>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                ))}
             </div>
         </>
     );
