@@ -2,19 +2,23 @@ import React, { useState, useEffect } from 'react';
 import '../App.css';
 
 function AssignDesign(props) {
+    // State variables
     const [user, setUser] = useState([]);
     const [isAssigning, setIsAssigning] = useState(false);
     const [selectedDepartment, setSelectedDepartment] = useState('');
     const [selectedDivision, setSelectedDivision] = useState('');
 
+    // Update user state when props.user changes
     useEffect(() => {
         setUser((props.userData) || []);
     }, [props.userData]);
     
+    // Handle click to start the assigning process
     const handleAssignClick = () => {
         setIsAssigning(true);
     };
 
+    // Handle click to unassign the user
     const handleUnassignClick = async () => {
         try {
             // Make a request to unassign the user in the backend
@@ -25,29 +29,31 @@ function AssignDesign(props) {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
                 body: JSON.stringify({
-                    department: '', // Set to null or appropriate value
-                    division: '' // Set to null or appropriate value
+                    department: '',
+                    division: ''
                 }),
             });
     
             // Assuming a successful unassign in the backend, update the local state
             setUser({
-                ...props.userData,
+                ...user,
                 department: '',
                 division: ''
             });
         } catch (error) {
             console.error('Error unassigning user:', error);
-            // Handle error as needed
+            // Handle error (if needed)
+
         }
     };
     
+    // Handle form submission to assign the user
     const handleAssignSubmit = async (e) => {
         e.preventDefault(); // Prevent the default form submission behavior (page refresh)
     
         try {
             // Make a request to assign the user in the backend
-            await fetch(`/assignUser/${user._id}`, { // Corrected the URL to assignUser
+            await fetch(`/unassignAssignUser/${user._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -59,13 +65,13 @@ function AssignDesign(props) {
                 }),
             });
     
-            // Assuming a successful assign in the backend, update the local state
-            setUser({
-                ...props.userData,
+            // Use functional update to ensure the state is updated correctly
+            setUser(prevUser => ({
+                ...prevUser,
                 department: selectedDepartment,
                 division: selectedDivision
-            });
-    
+            }));
+
             setIsAssigning(false);
         } catch (error) {
             console.error('Error assigning user:', error);
@@ -73,6 +79,7 @@ function AssignDesign(props) {
         }
     };
 
+    // Handle click to cancel the assigning process
     const handleCancelAssign = () => {
         setIsAssigning(false);
         setSelectedDepartment('');
@@ -82,13 +89,15 @@ function AssignDesign(props) {
 
     return (
         <>
-            {props.userData.department && props.userData.division ? (
+            {user.department && user.division ? (
+                // User already assigned
                 <>
                     <button className='unassignButton' onClick={handleUnassignClick}>
                         Unassign
                     </button>
                 </>
             ) : (
+                // User not assigned
                 <>
                 {isAssigning ? (
                     <>
@@ -126,7 +135,6 @@ function AssignDesign(props) {
                                 onChange={(e) => setSelectedDivision(e.target.value)}
                             >
                                 <option value="" disabled selected hidden>Select your division</option>
-                                <option value=''>Select Division</option>
                                 <option value='writing'>Writing</option>
                                 <option value='it'>It</option>
                                 <option value='advertising'>Advertising</option>

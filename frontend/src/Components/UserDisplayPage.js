@@ -5,10 +5,12 @@ import '../App.css';
 
 function UserDisplayPage(props) {
     
+    // State variables
     const [fetchedData, setFetchedData] = useState([]);
     const [editingUserId, setEditingUserId] = useState(null);
     const [newRole, setNewRole] = useState('');
 
+    // Update fetchedData when props.data changes
     useEffect(() => {
         setFetchedData(JSON.parse(props.data) || []);
     }, [props.data]);
@@ -23,20 +25,24 @@ function UserDisplayPage(props) {
         groupedData[item.role].push(item);
     });
 
+    // Helper function to capitalize the first letter of a string
     const capitalizeFirstLetter = (string) => {
         // Remove underscores and capitalize each word
         const stringWithoutUnderscores = string.replace(/_/g, ' ');
         return stringWithoutUnderscores.replace(/\b\w/g, (match) => match.toUpperCase());
     };
 
+    // Handle click event to start editing user
     const handleEditClick = (userId) => {
         setEditingUserId(userId);
     };
 
+    // Cancel the edit mode
     const handleCancelEdit = () => {
         setEditingUserId(null);
     };
 
+    // Handle role change for a user
     const handleRoleChange = async (userId) => {
         try {
             const auth = localStorage.getItem('token');
@@ -53,6 +59,7 @@ function UserDisplayPage(props) {
                 const updatedUser = await response.json();
                 console.log('User Role Changed:', updatedUser);
 
+                // Update the local state with the changed user role
                 const updatedData = fetchedData.map((user) =>
                     user._id === userId ? { ...user, role: newRole } : user
                 );
@@ -65,6 +72,7 @@ function UserDisplayPage(props) {
             console.error('Error changing user role:', error);
             // Handle error (if needed)
         } finally {
+            // Reset editing state variables
             setEditingUserId(null);
             setNewRole('');
         }
@@ -73,15 +81,20 @@ function UserDisplayPage(props) {
     return (
         <>
             <h1 className='pageDepartment'>Users</h1>
+            {/* User Display Section */}
             <div className="UserDisplay">
                 {Object.keys(groupedData)
                     .sort()
                     .map((division) => (
                         <div key={division}>
+                            {/* Division Header */}
                             <h4 className="divisionHeader">{capitalizeFirstLetter(division)}</h4>
+
+                            {/* User Information */}
                             {groupedData[division].map((user) => (
                                 <div key={user._id}>
                                     {editingUserId === user._id ? (
+                                        // Edit Mode
                                         <>
                                             <p>Username: {user.username}</p>
                                             <label htmlFor='newRole'>New Role: </label>
@@ -106,6 +119,7 @@ function UserDisplayPage(props) {
                                             <hr />
                                         </>
                                     ) : (
+                                        // Display Mode
                                         <>
                                             {/* User Information */}
                                             <p>{`Username: ${user.username}`}</p>
@@ -126,12 +140,6 @@ function UserDisplayPage(props) {
                         </div>
                     ))}
             </div>
-
-            <Link to="/">Home</Link>
-            <br />
-
-            <Link to="/AuthPanel">AuthPanel</Link>
-            <br />
         </>
     );
 }

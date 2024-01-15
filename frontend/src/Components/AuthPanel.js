@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '../App.css';
 
 class AuthPanel extends Component {
+    // Constructor to initialize state
     constructor(props) {
         super(props);
         this.state = {
@@ -12,15 +13,17 @@ class AuthPanel extends Component {
             password2: '',
             department: '',
             division: '',
-            isLogin: true,
+            isLogin: true, // Flag to determine whether it's a login or registration form
         };
     }
 
+    // Handle input changes in the form
     handleInputChange = (event) => {
         const { name, value } = event.target;
         this.setState({ [name]: value });
     };
 
+    // Handle form submission
     handleFormSubmit = async (event) => {
         event.preventDefault();
 
@@ -81,6 +84,7 @@ class AuthPanel extends Component {
         }
     };
 
+    // Toggle between login and registration forms
     toggleForm = () => {
         // Toggle between login and registration forms
         this.setState((prevState) => ({ isLogin: !prevState.isLogin }));
@@ -152,16 +156,18 @@ class AuthPanel extends Component {
                             <br />
                         </>
                     )}
+                    {/* Toggle button to switch between login and registration forms */}
                     <button type="button" onClick={this.toggleForm} className="toggle-button">{isLogin ? 'Register' : 'Login'}</button>
                     <br />
+                    {/* Submit button */}
                     <button type="submit" className="submit-button">{isLogin ? 'Login' : 'Register'}</button>
                 </form>
                 <br />
 
+                {/* Display whether it's a login or registration page */}
                 <p>{isLogin ? 'Login' : 'Registration'} page</p>
                 <Link to="/">Home</Link>
                 <br />
-
             </>
         );
     }

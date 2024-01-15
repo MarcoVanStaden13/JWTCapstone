@@ -5,6 +5,7 @@ import AuthPanel from './Components/AuthPanel.js'
 import './App.css';
 
 class App extends Component{
+    // Constructor to initialize state
     constructor(props) {
         super(props);
 
@@ -77,16 +78,7 @@ class App extends Component{
         return (
             <>
                 <Routes>
-                    {/* <Route
-                        path="/"
-                        element={
-                        isLoggedIn ? (
-                            <HomePage handleSignOut={this.handleSignOut} username={username} />
-                        ) : (
-                            <Navigate to="/auth" replace />
-                        )
-                        }
-                    /> */}
+                    {/* Home page route */}
                     <Route exact path="/" element={
                         <HomePage
                             handleSignOut={this.handleSignOut} 
@@ -98,13 +90,9 @@ class App extends Component{
                             division={division}
                         />
                     } />
+                    {/* Authentication panel route */}
                     <Route path="/auth" element={<AuthPanel handleSignIn={this.handleSignIn} />} />
-                  
                 </Routes>
-                {/* <NewsManagment />
-                <SoftwareReviews />
-                <HardwareReviews />
-                <OpinionPublishing /> */}
             </>
         );
     }

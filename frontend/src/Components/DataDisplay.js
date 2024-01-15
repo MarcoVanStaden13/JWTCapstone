@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '../App.css';
 
 function DataDisplay(props) {
+    // State variables
     const [fetchedData, setFetchedData] = useState([]);
     const [editingItemId, setEditingItemId] = useState(null);
     const [addingCredentialForDivision, setAddingCredentialForDivision] = useState(null);
@@ -12,6 +13,7 @@ function DataDisplay(props) {
         password: '',
     });
     
+    // Update fetchedData state when props.data changes
     useEffect(() => {
         setFetchedData(JSON.parse(props.data) || []);
     }, [props.data]);
@@ -26,21 +28,25 @@ function DataDisplay(props) {
         groupedData[item.division].push(item);
     });
     
+        // Helper function to capitalize the first letter aswell as replace any underscores with spaces
     const capitalizeFirstLetter = (string) => {
         // Remove underscores and capitalize each word
         const stringWithoutUnderscores = string.replace(/_/g, ' ');
         return stringWithoutUnderscores.replace(/\b\w/g, (match) => match.toUpperCase());
     };
     
+    // Handle click to start editing an item
     const handleEditClick = (itemId) => {
         setEditingItemId(itemId);
     };
     
+    // Handle click to cancel editing
     const handleCancelClick = () => {
         setEditingItemId(null);
     };
     
-      const handleInputChange = (e, itemId) => {
+    // Handle input change for editing an item
+    const handleInputChange = (e, itemId) => {
         const newData = fetchedData.map((item) => {
             if (item._id === itemId) {
                 return {
@@ -53,6 +59,7 @@ function DataDisplay(props) {
         setFetchedData(newData);
     };
     
+    // Handle form submission for editing an item
     const handleFormSubmit = async (e, itemId) => {
         e.preventDefault();
     
@@ -80,12 +87,13 @@ function DataDisplay(props) {
         setEditingItemId(null);
     };
 
+    // Check if the user is an admin or manager
     const isAdminOrManager = () => {
         const userLevel = localStorage.getItem('level');
         return userLevel === 'admin' || userLevel === 'manager';
     };
     
-
+    // Handle click to add a new credential for a division
     const handleAddCredentialClick = (division) => {
         setAddingCredentialForDivision(division);
         setNewCredential({
@@ -95,6 +103,7 @@ function DataDisplay(props) {
         });
     };
 
+    // Handle click to cancel adding a new credential
     const handleCancelAddCredential = () => {
         setAddingCredentialForDivision(null);
         setNewCredential({
@@ -104,6 +113,7 @@ function DataDisplay(props) {
         });
     };
 
+    // Handle form submission for adding a new credential
     const handleAddCredentialSubmit = async (e, division) => {
         e.preventDefault();
     
@@ -129,7 +139,7 @@ function DataDisplay(props) {
             });
     
             if (response.ok) {
-                // Update the state or re-fetch data as needed
+                // Update the state
                 const newData = await response.json();
                 console.log('New Credential Added:', newData);
                 setAddingCredentialForDivision(null); // Reset the state
@@ -149,14 +159,19 @@ function DataDisplay(props) {
 
     return (
         <>
+        {/* Page header */}
             <h1 className='pageDepartment'>{capitalizeFirstLetter(props.department)}</h1>
+
+            {/* Data display container */}
             <div className="DataDisplay">
                 {Object.keys(groupedData)
                 .sort() // Sort keys alphabetically
                 .map((division) => (
                     <div key={division}>
+                        {/* Division header */}
                         <div className='divisionHeader'>
                             <h4 className='divisionHeaderText'>{capitalizeFirstLetter(division)}</h4>
+                            {/* Button to add a new credential */}
                             <button
                                 className='divisionHeaderButton'
                                 onClick={() => handleAddCredentialClick(division)}
@@ -164,6 +179,8 @@ function DataDisplay(props) {
                             >
                                 +
                             </button>
+
+                            {/* Form for adding a new credential */}
                             {addingCredentialForDivision === division && (
                                 <form onSubmit={(e) => handleAddCredentialSubmit(e, division)}>
                                     {/* Form fields for new credential */}
@@ -191,6 +208,7 @@ function DataDisplay(props) {
                                 </form>
                             )}
                         </div>
+                        {/* Display credentials for the division */}
                         {groupedData[division].map((item) => (
                             <div key={item._id}>
                                {editingItemId === item._id ? (
@@ -219,6 +237,7 @@ function DataDisplay(props) {
                                     </button>
                                     </form>
                                 ) : (
+                                    // Display information for the credential
                                     <>
                                         <div className='dataDisplayLayout'>
                                             <div className='dataDisplayTopLeft'>
@@ -227,6 +246,7 @@ function DataDisplay(props) {
                                                 <p>{`Password: ${item.password}`}</p>
                                             </div>
                                             <div className='dataDisplayTopRight'>
+                                                {/* Edit button for admins and managers */}
                                                 {isAdminOrManager() && (
                                                     <button className='editButton' onClick={() => handleEditClick(item._id)}>
                                                         Edit
