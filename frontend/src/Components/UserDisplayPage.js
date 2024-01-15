@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import AssignDesign from './AssignDesign.js';
 import '../App.css';
 
 function UserDisplayPage(props) {
@@ -89,6 +90,7 @@ function UserDisplayPage(props) {
                                                 value={newRole}
                                                 onChange={(e) => setNewRole(e.target.value)}
                                             >
+                                                <option value="" disabled selected hidden>Set user role</option>
                                                 <option value="admin">Admin</option>
                                                 <option value="manager">Manager</option>
                                                 <option value="normal">User</option>
@@ -115,7 +117,7 @@ function UserDisplayPage(props) {
                                             </p>
                                             <p>{`Department: ${user.department}`}</p>
                                             <p>{`Division: ${user.division}`}</p>
-
+                                            <AssignDesign userData={user} siteData={props.siteData}/>
                                             <hr />
                                         </>
                                     )}

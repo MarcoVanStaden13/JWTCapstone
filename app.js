@@ -234,7 +234,7 @@ APP.put('/updateData/:department/:documentId', async (req, res) => {
     }
 });
 
-// Add a new endpoint to create passwords and usernames
+// Add a new endpoint to create SiteData
 APP.post('/newData/:department/', async (req, res) => {
     try {
         const auth = req.headers['authorization'];
@@ -305,7 +305,7 @@ APP.post('/newData/:department/', async (req, res) => {
 });
 
 // Add a new endpoint for assigning and designing users
-APP.put('/assignUser/:userId', async (req, res) => {
+APP.put('/unassignAssignUser/:userId', async (req, res) => {
     const auth = req.headers['authorization'];
     const token = auth.split(' ')[1];
 

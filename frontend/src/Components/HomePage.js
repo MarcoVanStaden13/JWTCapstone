@@ -85,7 +85,7 @@ function HomePage (props) {
                     <>
                         {fetchedData && (
                             <div>
-                                <UserDisplayPage data={JSON.stringify(fetchedUsers, null, 2)}/>
+                                <UserDisplayPage data={JSON.stringify(fetchedUsers, null, 2)} siteData={JSON.stringify(fetchedData)}/>
                             </div>
                         )}
                     </>

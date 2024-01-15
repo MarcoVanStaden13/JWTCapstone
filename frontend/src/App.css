@@ -19,6 +19,10 @@
   margin-top: 20pt;
 }
 
+Link{
+  all:inherit;
+}
+
 .form-input{
   display: flex;
   align-items: center;

@@ -31,6 +31,7 @@ class AuthPanel extends Component {
                 // Make an HTTP request to your backend login endpoint
                 const response = await fetch('/login', {
                     method: 'POST',
+                    redirect: 'follow',
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -42,6 +43,7 @@ class AuthPanel extends Component {
                     const data = await response.json();
                     localStorage.setItem('token', data.token);
                     this.props.handleSignIn(data); // Call the handleSignIn function from App.js
+                    this.props.history.push('/'); // Redirect to the homepage
                 } else {
                     // Handle login failure (e.g., show an error message)
                     console.error('Login failed:', response.statusText);
@@ -68,7 +70,7 @@ class AuthPanel extends Component {
 
                 if (response.ok) {
                     // Successfully registered, handle the response accordingly (e.g., redirect)
-                    this.props.history.push('/auth'); // Redirect to login page
+                    this.setState({ isLogin: true }); // Set isLogin to true to switch to the login panel
                 } else {
                     // Handle registration failure (e.g., show an error message)
                     console.error('Registration failed:', response.statusText);
