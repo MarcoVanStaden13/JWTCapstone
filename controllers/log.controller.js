@@ -208,11 +208,6 @@ exports.createCredential = async function (req, res) {
         const token = auth.split(' ')[1];
         const decoded = JWT.verify(token, 'JWT-Secret');
 
-        // Check if the user is an admin
-        if (decoded.level !== 'admin') {
-            return res.status(403).json({ error: 'Access forbidden' });
-        }
-
         const department = req.params.department;
 
         const newData = req.body;
