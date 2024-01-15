@@ -1,6 +1,30 @@
 const JWT = require('jsonwebtoken');
+const mongoose = require('mongoose');
 const Users = require('../models/users.model.js')
+
+// Connect to MongoDB
+const uri = 'mongodb+srv://marco:hyperionPassword123@capstone.ahbbpec.mongodb.net/UserData';
+mongoose.connect(uri);
+
+mongoose.connection.on('error', function () {
+  console.log('Could not connect to the database. Exiting now...');
+  process.exit();
+});
+mongoose.connection.once('open', function () {
+  console.log('Successfully connected to the database');
+
+});
+
+// Connect to SiteData MongoDB
 const siteDataSchema = require('../models/siteData.model.js')
+const siteDataConnection = mongoose.createConnection('mongodb+srv://marco:hyperionPassword123@capstone.ahbbpec.mongodb.net/SiteData');
+siteDataConnection.on('error', function () {
+    console.log('Could not connect to the SiteData database. Exiting now...');
+    process.exit();
+});
+siteDataConnection.once('open', function () {
+    console.log('Successfully connected to the SiteData database');
+});
 
 // Define models for SiteData collections
 const SoftwareReviewsModel = siteDataConnection.model('software_reviews', siteDataSchema);
@@ -352,5 +376,18 @@ exports.registerUser = async function (req, res){
     } catch (error) {
         console.error('Registration error:', error);
         res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+//Function verifys a user
+exports.verifyToken = async function (req, res) {
+    const auth = req.headers['authorization']
+    const token = auth.split(' ')[1]
+
+    try {
+        const decoded = JWT.verify(token, 'JWT-Secret')
+        res.send(decoded)
+    }catch (err) {
+        res.status(401).send({'err': 'Bad JWT!'})
     }
 }

@@ -27,30 +27,9 @@ APP.use(EXPRESS.static('public')) // Serve static files from the 'public' direct
 APP.use(EXPRESS.json()) // Parse incoming JSON requests
 APP.use(BODYPARSER.urlencoded({ extended: true })) // Parse incoming form data
 
-// Connect to MongoDB
-const uri = 'mongodb+srv://marco:hyperionPassword123@capstone.ahbbpec.mongodb.net/UserData';
-mongoose.connect(uri);
 
-mongoose.connection.on('error', function () {
-  console.log('Could not connect to the database. Exiting now...');
-  process.exit();
-});
-mongoose.connection.once('open', function () {
-  console.log('Successfully connected to the database');
 
-});
 
-// Connect to SiteData MongoDB
-const siteDataUri = 'mongodb+srv://marco:hyperionPassword123@capstone.ahbbpec.mongodb.net/SiteData';
-const siteDataConnection = mongoose.createConnection(siteDataUri);
-
-siteDataConnection.on('error', function () {
-    console.log('Could not connect to the SiteData database. Exiting now...');
-    process.exit();
-});
-siteDataConnection.once('open', function () {
-    console.log('Successfully connected to the SiteData database');
-});
 
 
 // Routes
