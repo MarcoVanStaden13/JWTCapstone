@@ -44,7 +44,10 @@ function AuthPanel(props) {
                     const data = await response.json();
                     localStorage.setItem('token', data.token);
                     props.handleSignIn(data); // Call the handleSignIn function from App.js
-                    navigate('/'); // Redirect to the homepage
+                    // Delay navigation for 1000 milliseconds (1 second)
+                    setTimeout(() => {
+                        navigate('/');
+                    }, 1000);
                 } else {
                     // Handle login failure
                     console.error('Login failed:', response.statusText);
@@ -60,7 +63,7 @@ function AuthPanel(props) {
             }
 
             try {
-		// Make an HTTP request to your backend register endpoint
+		        // Make an HTTP request to your backend register endpoint
                 const response = await fetch('/register', {
                     method: 'POST',
                     headers: {
@@ -70,7 +73,7 @@ function AuthPanel(props) {
                 });
 
                 if (response.ok) {
-		    // Successfully registered, handle the response accordingly (e.g., redirect)
+		            // Successfully registered, handle the response accordingly (e.g., redirect)
                     setState((prevState) => ({ ...prevState, isLogin: true })); // Set isLogin to true to switch to the login panel
                 } else {
                     // Handle registration failure
@@ -89,7 +92,7 @@ function AuthPanel(props) {
     };
 
     const { isLogin } = state;
-    
+
     return (
         <>
             <form onSubmit={handleFormSubmit} className="auth-form">
