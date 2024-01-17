@@ -12,6 +12,7 @@ function AuthPanel(props) {
         division: '',
         isLogin: true, // Flag to determine whether it's a login or registration form
     });
+    const [loading, setLoading] = useState(false)
 
     const navigate = useNavigate();
 
@@ -26,7 +27,7 @@ function AuthPanel(props) {
         event.preventDefault();
 
         const { username, password, password1, password2, department, isLogin, division } = state;
-
+        setLoading(true)
         if (isLogin) {
             try {
                 // Make an HTTP request to the backend login endpoint
@@ -46,6 +47,7 @@ function AuthPanel(props) {
                     props.handleSignIn(data); // Call the handleSignIn function from App.js
                     // Delay navigation for 1000 milliseconds (1 second)
                     setTimeout(() => {
+                        setLoading(false)
                         navigate('/');
                     }, 1000);
                 } else {
@@ -161,16 +163,15 @@ function AuthPanel(props) {
                     {isLogin ? 'Register' : 'Login'}
                 </button>
                 <br />
+                {loading ? (<div class="loading-container">
+                    <div class="pinwheel"></div>
+                </div>) : ''}
+                <br />
                 {/* Submit button */}
                 <button type="submit" className="submit-button">
                     {isLogin ? 'Login' : 'Register'}
                 </button>
             </form>
-            <br />
-
-            {/* Display whether it's a login or registration page */}	
-            <p>{isLogin ? 'Login' : 'Registration'} page</p>
-            <Link to="/">Home</Link>
             <br />
         </>
     );

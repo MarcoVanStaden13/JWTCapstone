@@ -220,3 +220,24 @@ Link{
   background-color: rgba(229, 239, 91, 0.476) !important;
 
 }
+
+/* AuthPage Pinwheel */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pinwheel {
+  width: 10px;
+  height: 10px;
+  border: 3px solid #EE6C4D;
+  border-top: 3px solid #118AB2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
