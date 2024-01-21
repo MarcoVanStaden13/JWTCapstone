@@ -122,6 +122,11 @@ function HomePage (props) {
 
     // Helper function to capitalize the first letter aswell as replace any underscores with spaces
     const capitalizeFirstLetter = (string) => {
+        // Check if string is null or undefined
+        if (string == null) {
+            return '';
+        }
+
         // Remove underscores and capitalize each word
         const stringWithoutUnderscores = string.replace(/_/g, ' ');
         return stringWithoutUnderscores.replace(/\b\w/g, (match) => match.toUpperCase());
@@ -152,10 +157,10 @@ function HomePage (props) {
                             {isDropdownOpen && (
                                 <div className="dropdown-content">
                                     {/* uncomment for raw data */}
-                                    {/* <button onClick={() => setSelectedCategory('data')}>All Data</button>
+                                    <button onClick={() => setSelectedCategory('data')}>All Data</button>
                                     <br />
                                     <button onClick={() => setSelectedCategory('usersData')}>Users Data</button>
-                                    <br /> */}
+                                    <br />
                                     <button onClick={() => setSelectedCategory('news_management')}>News Management</button>
                                     <br />
                                     <button onClick={() => setSelectedCategory('software_reviews')}>Software Reviews</button>
