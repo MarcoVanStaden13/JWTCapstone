@@ -35,11 +35,6 @@ function AssignDesign(props) {
             });
     
             // Assuming a successful unassign in the backend, update the local state
-            setUser({
-                ...user,
-                department: '',
-                division: ''
-            });
             window.location.reload()
             alert(`User: ${user.username} updated succesfully`)
         } catch (error) {
@@ -67,11 +62,6 @@ function AssignDesign(props) {
             });
     
             // Use functional update to ensure the state is updated correctly
-            setUser(prevUser => ({
-                ...prevUser,
-                department: selectedDepartment,
-                division: selectedDivision
-            }));
             window.location.reload()
             alert(`User: ${user.username} updated succesfully`)
 
