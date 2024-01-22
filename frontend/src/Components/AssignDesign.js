@@ -40,6 +40,8 @@ function AssignDesign(props) {
                 department: '',
                 division: ''
             });
+            window.location.reload()
+            alert(`User: ${user.username} updated succesfully`)
         } catch (error) {
             console.error('Error unassigning user:', error);
             // Handle error (if needed)
@@ -70,6 +72,8 @@ function AssignDesign(props) {
                 department: selectedDepartment,
                 division: selectedDivision
             }));
+            window.location.reload()
+            alert(`User: ${user.username} updated succesfully`)
 
             setIsAssigning(false);
         } catch (error) {

@@ -93,14 +93,9 @@ exports.getData = async function (req, res) {
         }
 
         if (userLevel === 'manager' && userDepartment === requestedDepartment) {
-            if (requestedDivision === 'all') {
-                // Fetch all documents in the department for managers
-                const allDocuments = await documentModel.find({});
-                res.json({ allDocuments });
-            } else {
-                // Send an error if a specific division is provided for managers
-                return res.status(400).json({ error: 'Invalid division' });
-            }
+            // Fetch all documents in the department for managers
+            const allDocuments = await documentModel.find({});
+            res.json({ allDocuments });
         } else {
             // Fetch the document from the database based on division
             const document = await documentModel.find({

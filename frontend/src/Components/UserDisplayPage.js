@@ -13,7 +13,7 @@ function UserDisplayPage(props) {
     // Update fetchedData when props.data changes
     useEffect(() => {
         setFetchedData(JSON.parse(props.data) || []);
-    }, [props.data]);
+    }, [props.data, setNewRole]);
 
     const groupedData = {};
 
