@@ -30,6 +30,10 @@ function DataDisplay(props) {
     
         // Helper function to capitalize the first letter aswell as replace any underscores with spaces
     const capitalizeFirstLetter = (string) => {
+        //Check if string is null or undefined
+        if (!string){
+            return string;
+        }
         // Remove underscores and capitalize each word
         const stringWithoutUnderscores = string.replace(/_/g, ' ');
         return stringWithoutUnderscores.replace(/\b\w/g, (match) => match.toUpperCase());
@@ -159,7 +163,7 @@ function DataDisplay(props) {
     return (
         <>
         {/* Page header */}
-            <h1 className='pageDepartment'>{capitalizeFirstLetter(props.department)}</h1>
+            <h1 className='pageDepartment'>{capitalizeFirstLetter(String(props.department))}</h1>
 
             {/* Data display container */}
             <div className="DataDisplay">
@@ -169,7 +173,7 @@ function DataDisplay(props) {
                     <div key={division}>
                         {/* Division header */}
                         <div className='divisionHeader'>
-                            <h4 className='divisionHeaderText'>{capitalizeFirstLetter(division)}</h4>
+                            <h4 className='divisionHeaderText'>{capitalizeFirstLetter(String(division))}</h4>
                             {/* Button to add a new credential */}
                             <button
                                 className='divisionHeaderButton'
